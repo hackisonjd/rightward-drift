@@ -114,7 +114,24 @@ function init() {
     req.open("GET", currentCourse);
     req.send();
   }
-}
+
+  let resultTP;
+  timeParity(function(val) {
+    console.log("val", val);
+    resultTP = val;
+  });
+
+  // we cannot get any useful data from resultTP, because its asynchronous. 
+  // Instead, we need to ensure we use it AFTER the function we pass to timeParity has been called
+  
+
+  function gotParityFile(results) {
+    console.log('results from parity file', results);
+  }
+
+  console.log('dataLocationFromParity(resultTP)', dataLocationFromParity(resultTP));
+  const reqParity = new XMLHttpRequest();
+
 // courseCards.forEach((c) => document.write(c));
 
 // console.log(courseCards);
@@ -159,4 +176,4 @@ function updateCount() {
   const countValue = filteredCourses.length;
   count.innerText = `${countValue} items`;
 }
-
+}
