@@ -43,7 +43,7 @@ req.send();
 //  for each course,
 //    get the detailed info about that course <prefix+number>.json
 //      log the detailed info
-//      get the timeParity
+//      get the timeParity (what time is it?)
 //        get the data file corresponding to the timeParity (dataLocationFromParity can help)
 //        log the parity-text
 
@@ -92,12 +92,28 @@ const courseToCard = ({
   return courseTemplate;
 };
 
+function handleCourseDetails() {
+  console.log("handleCourseDetails");
+  const structuredData = JSON.parse(this.responseText);
+  console.log("detailed course info", structuredData);
+  data = structuredData;
+}
+
 function init() {
   filteredCourses = data.items;
   courseCards = data.items.map(courseToCard);
   filteredCourseCards = courseCards;
   resultsContainer.innerHTML = filteredCourseCards.join("");
   updateCount();
+
+  for (let i = 0; i < filteredCourses.length; i++) {
+    let currentCourse = `${filteredCourses[i].prefix}${filteredCourses[i].number}.json`;
+    console.log("Current course", currentCourse);
+    const req = new XMLHttpRequest();
+    req.addEventListener("load", handleCourseDetails);
+    req.open("GET", currentCourse);
+    req.send();
+  }
 }
 // courseCards.forEach((c) => document.write(c));
 
